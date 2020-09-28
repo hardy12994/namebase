@@ -4,10 +4,6 @@ class NamebaseBox {
   orderToBuy = [];  // { id: 2, type: 'buy', quantity: 1, price: 1 };
   actionOrders = []; // order with performed actions
 
-  sync(fileName) {
-    
-  }
-
   buy (quantity, price) {
     if(this.orderToSell.length === 0) {
       this.orderToBuy.push({
@@ -33,6 +29,11 @@ class NamebaseBox {
         if (isCurrentItemHaveAllOrMore) {
           if(item.quantity === currentQuantityRequirement) {
             this.orderToSell.splice(index, 1);
+            this.actionOrders.push({
+              ...item,
+              isBuyOrder: true,
+              executedQuantity : currentQuantityRequirement
+            });
           } else {
             // more
             item.quantity = item.quantity - currentQuantityRequirement;
@@ -42,6 +43,11 @@ class NamebaseBox {
         } else {
           // having less
           this.orderToSell.splice(index, 1);
+          this.actionOrders.push({
+            ...item,
+            isBuyOrder: true,
+            executedQuantity : item.quantity
+          });
           quantityCompleted = quantityCompleted + item.quantity;
         }
       }
